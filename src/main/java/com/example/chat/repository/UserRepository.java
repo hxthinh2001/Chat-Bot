@@ -11,6 +11,11 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
+    @Query(""" 
+            SELECT * FROM users WHERE id = :id;
+            """)
+    User findUserById(Long id);
+
     @Query("""
             SELECT * FROM users WHERE username = :username  OR email = :email;
             """)
