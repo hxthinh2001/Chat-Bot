@@ -26,4 +26,8 @@ public class UserService {
         return userRepository.checkUser(username, password);
     }
 
+    public List<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }

@@ -17,10 +17,13 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<User> checkUserExist(@Param("username") String username, @Param("email") String email);
 
 
-    @Query ("""
+    @Query("""
             SELECT * FROM users WHERE username = :username  AND password = :password;
             """)
     User checkUser(@Param("username") String username, @Param("password") String password);
+
+    @Query("SELECT * FROM users WHERE username LIKE CONCAT('%', :username, '%')")
+    List<User> findByUsername(@Param("username") String username);
 
 
 }
