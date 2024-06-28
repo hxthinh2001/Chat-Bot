@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface FriendRepository extends CrudRepository<FriendRequest, Long> {
 
@@ -20,7 +21,19 @@ public interface FriendRepository extends CrudRepository<FriendRequest, Long> {
     @Modifying
     @Query("""
             UPDATE friend_requests SET status = :status, update_at = :updatedAt
-            WHERE sender_id = :senderId AND receiver_id = :receiverId
+            WHERE sender_id = :senderId AND receiver_id = :receiverId 
             """)
-    void updateFriendRequest(@Param("id") Long id, @Param("status") String status, @Param("updateAt") LocalDateTime updateAt);
+    void updateFriendRequest(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId, @Param("status") String status, @Param("updatedAt") LocalDateTime updatedAt);
+
+    @Query ("""
+            SELECT * FROM `friend_requests`
+            WHERE receiver_id = :receiverId AND status= :status
+            """)
+    List<FriendRequest> findFriendsByReceiver(@Param("receiverId") Long receiverId, @Param("status") String status);
+
+    @Query ("""
+            SELECT * FROM `friend_requests`
+            WHERE sender_id = :senderId AND status= :status
+            """)
+    List<FriendRequest> findFriendsBySender(@Param("senderId") Long senderId,   @Param("status") String status);
 }

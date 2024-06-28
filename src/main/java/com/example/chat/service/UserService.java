@@ -1,11 +1,15 @@
 package com.example.chat.service;
 
+import com.example.chat.entity.FriendRequest;
 import com.example.chat.entity.User;
 import com.example.chat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -32,5 +36,7 @@ public class UserService {
     public User findUserById(Long id) {
         return userRepository.findUserById(id);
     }
+
+
 
 }

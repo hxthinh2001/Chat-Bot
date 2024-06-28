@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/demo")
+@RequestMapping(path = "/chat")
 public class RegisterController {
 
     @Autowired
