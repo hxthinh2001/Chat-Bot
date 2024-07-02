@@ -21,6 +21,9 @@ public class FriendService {
     @Autowired
     private UserService userService;
 
+    public FriendRequest existFriendRequest(Long senderId, Long receiverId) {
+        return friendRepository.findFriendRequest(senderId, receiverId);
+    }
 
     public void sendFriendRequest(Long senderId, Long receiverId) {
         LocalDateTime now = LocalDateTime.now();
@@ -33,8 +36,7 @@ public class FriendService {
     }
 
     public void rejectFriendRequest(Long senderId, Long requestId) {
-        LocalDateTime now = LocalDateTime.now();
-        friendRepository.updateFriendRequest(senderId, requestId, "REJECTED", now);
+        friendRepository.rejectFriendRequest(senderId, requestId, "REJECTED");
     }
 
 
@@ -55,7 +57,7 @@ public class FriendService {
         }
         // Tìm kiếm thông tin của các user có ID trong friendIds
         List<User> friend = new ArrayList<>();
-        for (Long id : friendIds){
+        for (Long id : friendIds) {
             User user = userService.findUserById(id);
             friend.add(user);
         }

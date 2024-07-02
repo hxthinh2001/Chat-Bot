@@ -1,6 +1,8 @@
 package com.example.chat.controller;
 
+import com.example.chat.Exception.FriendRequestAlreadySentException;
 import com.example.chat.Exception.UserNotFoundException;
+import com.example.chat.entity.FriendRequest;
 import com.example.chat.entity.User;
 import com.example.chat.service.FriendService;
 import com.example.chat.service.UserService;
@@ -25,10 +27,17 @@ public class FriendController {
     }
 
     @PostMapping("/send")
-    public String sendFriendRequest(@RequestParam Long senderId, @RequestParam Long receiverId) {
+    public String sendFriendRequest(@RequestBody FriendRequest friendRequest) {
+        Long senderId = friendRequest.getSenderId();
+        Long receiverId = friendRequest.getReceiverId();
+
         User exitSender = userService.findUserById(senderId);
         User exitReceiver = userService.findUserById(receiverId);
+        FriendRequest exitFriendRequest = friendRequestService.existFriendRequest(senderId, receiverId);
 
+        if (exitFriendRequest != null) {
+            throw new FriendRequestAlreadySentException("Friend request already sent");
+        }
         if (senderId.equals(receiverId)) {
             throw new UserNotFoundException("You can't send friend request to yourself");
         }
@@ -52,15 +61,18 @@ public class FriendController {
         return "Friend request accepted";
     }
 
+    @PostMapping("/reject")
+
     @GetMapping("/list")
     public List<User> listFriendRequest(@RequestParam Long userId) {
         User exitUser = userService.findUserById(userId);
+
 
         if (exitUser == null) {
             throw new UserNotFoundException("User not found");
         }
 
-        return  friendRequestService.listFriendRequest(userId);
+        return friendRequestService.listFriendRequest(userId);
     }
 
 }
